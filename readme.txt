@@ -12,14 +12,10 @@ If your shop send physical products and you have to track your shipping, this pl
 
 == Description ==
 
-Yith Woocommerce Order Tracking is a WordPress plugin that tracks orders made on an e-commerce platform once they are considered completed.
+YITH Woocommerce Order Tracking is a WordPress plugin that tracks orders made on an e-commerce platform once they are considered completed.
 The plugin offers a list of possible carriers to select for every single order, in addition to the possibility to express particular information about the delivery.
 
 Discover all the features of the plugin and install it in your theme: the result will be extremely satisfying.
-
-Working demo are available:
-
-**[LIVE DEMO](http://plugins.yithemes.com/yith-woocommerce-order-tracking/)**
 
 = Installation =
 
