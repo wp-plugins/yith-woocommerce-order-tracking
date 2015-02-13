@@ -17,6 +17,8 @@ The plugin offers a list of possible carriers to select for every single order, 
 
 Discover all the features of the plugin and install it in your theme: the result will be extremely satisfying.
 
+Please, read the the **[official plugin documentation](http://yithemes.com/docs-plugins/yith-woocommerce-order-tracking)** to know all plugin features.
+
 = Installation =
 
 Important: before of all you have to download and activate WooCommerce plugin, which is mandatory for Yith WooCommerce Order Tracking to be working. If WooCommerce plugin is active, you just need to activate the Yith WooCommerce Order Tracking plugin.
