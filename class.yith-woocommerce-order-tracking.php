@@ -129,6 +129,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 			$this->default_carrier     = get_option( 'ywot_carrier_default_name' );
 			$this->orders_pattern      = get_option( 'ywot_order_tracking_text' );
 			$this->order_text_position = get_option( 'ywot_order_tracking_text_position' );
+
 		}
 
 		/**
@@ -144,7 +145,6 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 			wp_register_script( "tooltipster", YITH_YWOT_URL . 'assets/js/jquery.tooltipster.min.js', array( 'jquery' ) );
 			wp_enqueue_script( 'tooltipster' );
 			wp_enqueue_style( 'tooltipster_css', YITH_YWOT_URL . 'assets/css/tooltipster.css' );
-
 
 			wp_register_script( "ywot_script", YITH_YWOT_URL . 'assets/js/ywot.js' );
 			$premium = defined( 'YITH_YWOT_PREMIUM' );
@@ -166,8 +166,13 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 * @return void
 		 */
 		public function set_default_carrier( $post_id ) {
+
 			if ( isset( $this->default_carrier ) && ( strlen( $this->default_carrier ) > 0 ) ) {
-				add_post_meta( $post_id, 'ywot_carrier_name', $this->default_carrier );
+				if ( defined( 'YITH_YWOT_PREMIUM' ) ) {
+					add_post_meta( $post_id, 'ywot_carrier_id', $this->default_carrier );
+				} else {
+					add_post_meta( $post_id, 'ywot_carrier_name', $this->default_carrier );
+				}
 			}
 		}
 
@@ -257,7 +262,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 			}
 
 			$message = $this->get_picked_up_message( $data );
-			echo '<a class="tooltip track-button ' . $css_class . ' " style="display:inline-block;height:25px; padding-top:0; padding-bottom:0" href="#" data-title="' . $message . '"><img class="track-button" style="height:25px;" src="' . YITH_YWOT_ASSETS_URL . '/images/order-picked-up.png" data-title="' . $message . '" /></a>';
+			echo '<a class="track-button ' . $css_class . ' " style="display:inline-block;height:25px; padding-top:0; padding-bottom:0" href="#" data-title="' . $message . '"><img class="track-button" style="height:25px;" src="' . YITH_YWOT_ASSETS_URL . '/images/order-picked-up.png" data-title="' . $message . '" /></a>';
 		}
 
 		/**
@@ -545,7 +550,6 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 				$this,
 				'show_order_tracking_metabox'
 			), 'shop_order', 'side', 'high' );
-
 		}
 
 		/**
@@ -613,8 +617,6 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 * @return void
 		 */
 		function save_order_tracking_metabox( $post_id ) {
-			//wp_die(var_dump($_POST));
-
 			update_post_meta( $post_id, 'ywot_tracking_code', stripslashes( $_POST['ywot_tracking_code'] ) );
 			update_post_meta( $post_id, 'ywot_carrier_name', stripslashes( $_POST['ywot_carrier_name'] ) );
 			update_post_meta( $post_id, 'ywot_pick_up_date', stripslashes( $_POST['ywot_pick_up_date'] ) );

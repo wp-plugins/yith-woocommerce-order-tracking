@@ -4,16 +4,15 @@ Contributors: yithemes
 Tags: woocommerce, order tracking, order track, order trace, delivery, carriers, shipping, ship orders, e-commerce, send product, product shipping, delivery notes, track carriers, track email, delivery note, order shipping, order, orders, shop, e commerce, ecommerce
 Requires at least: 4.0
 Tested up to: 4.1.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 
-If your shop send physical products and you have to track your shipping, this plugin is the ultimate tool you need.
+Add easy managing order shipping information to your shop and lets your customers being notified about the shipping.
 
 == Description ==
 
-YITH Woocommerce Order Tracking is a WordPress plugin that tracks orders made on an e-commerce platform once they are considered completed.
-The plugin offers a list of possible carriers to select for every single order, in addition to the possibility to express particular information about the delivery.
+YITH Woocommerce Order Tracking is a WordPress plugin that allows you to manage easily shipping information concerning your order and that lets your customers be notified about their order shipping.
 
 Discover all the features of the plugin and install it in your theme: the result will be extremely satisfying.
 
@@ -21,7 +20,7 @@ Please, read the the **[official plugin documentation](http://yithemes.com/docs-
 
 = Installation =
 
-Important: before of all you have to download and activate WooCommerce plugin, which is mandatory for Yith WooCommerce Order Tracking to be working. If WooCommerce plugin is active, you just need to activate the Yith WooCommerce Order Tracking plugin.
+Important: before of all, you have to download and activate WooCommerce plugin, which is mandatory for Yith WooCommerce Order Tracking to be working. If WooCommerce plugin is active, you just need to activate the Yith WooCommerce Order Tracking plugin.
 
 = Configuration =
 
@@ -43,23 +42,23 @@ YITH WooCommerce Order Tracking will add a new tab called "Order Tracking" insid
 
 == Changelog ==
 
-= 1.0.0 =
+= Version 1.0.1 - RELEASED: FEB 16, 2015 =
+
+* Fixed: Default carrier sometimes was not correctly selected on new orders
+
+= Version 1.0.0 - RELEASED: FEB 13, 2015 =
 
 * Initial release
 
 == Frequently Asked Questions ==
 
-* Can i upgrade free version plugin?
+* I always make use of the same carrier, may I set it as default carrier?
 
-It's easy.Go to this page,purchase premium version and install it into your theme. Activating the premium version, you will automatically deactivate the free one.
+Yes, sure, set carrier name in plugin settings and for each new order you will find the field "carrier name" automatically filled with your default carrier.
 
-* Do I lose the settings of the free version if I activate the premium one?
+* Can I customise the message I want to send to customers?
 
-No, the premium version will keep in memory your settings, unlocking new features.
-
-* My favorite carrier is not present in the list, can I add it?
-
-Open a ticket in the support desk, we will be glad to help you.
+You can set the text to add to orders by means of the specific plugin option. You can also use some optional placeholders to specify carrier's name, tracking code and shipping date.
 
 == Suggestions ==
 
@@ -75,6 +74,6 @@ If you have created your own language pack, or have an update for an existing on
 
 == Upgrade notice ==
 
-= 1.0.0 =
+= 1.0.1 =
 
-Initial release
+Last release

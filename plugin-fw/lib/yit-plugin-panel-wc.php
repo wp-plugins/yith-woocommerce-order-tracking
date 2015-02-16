@@ -63,11 +63,9 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
                 add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 100 );
                 add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
                 add_action( 'admin_init', array( $this, 'woocommerce_update_options' ) );
+
                 add_action( 'woocommerce_admin_field_boxinfo', array( $this, 'yit_boxinfo' ), 10, 1 );
                 add_action( 'woocommerce_admin_field_videobox', array( $this, 'yit_videobox' ), 10, 1 );
-
-                add_action( 'woocommerce_admin_field_upload', array( $this, 'yit_upload' ), 10, 1 );
-                add_action( 'woocommerce_update_option_upload', array( $this, 'yit_upload_update' ), 10, 1 );
 
             }
         }
@@ -151,8 +149,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
          */
 
         public function yit_upload( $args = array() ) {
-
-            if ( !empty( $args ) ) {
+            if ( ! empty( $args ) ) {
                 $args['value'] = ( get_option($args['id'])) ? get_option($args['id']) : $args['default'];
                 extract( $args );
 
@@ -303,7 +300,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
             wp_enqueue_script( 'woocommerce_settings', $woocommerce->plugin_url() . '/assets/js/admin/settings.min.js', array( 'jquery', 'jquery-ui-datepicker','jquery-ui-dialog', 'jquery-ui-sortable', 'iris', 'chosen' ), $woocommerce->version, true );
             wp_enqueue_script( 'yit-plugin-panel', YIT_CORE_PLUGIN_URL . '/assets/js/yit-plugin-panel.min.js', array( 'jquery', 'jquery-chosen' ), $this->version, true );
             wp_localize_script( 'woocommerce_settings', 'woocommerce_settings_params', array(
-                'i18n_nav_warning' => __( 'The changes you made will be lost if you navigate away from this page.', 'yit' )
+                'i18n_nav_warning' => __( 'The changes you made will be lost if you leave this page.', 'yit' )
             ) );
         }
 
