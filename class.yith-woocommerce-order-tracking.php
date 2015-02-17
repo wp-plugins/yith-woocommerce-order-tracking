@@ -242,7 +242,11 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 
 			$message = str_replace(
 				array( "[carrier_name]", "[pickup_date]", "[track_code]" ),
-				array( $order_carrier_name, $order_pick_up_date, $order_tracking_code ),
+				array(
+					$order_carrier_name,
+					date_i18n( get_option( 'date_format' ), strtotime( $order_pick_up_date ) ),
+					$order_tracking_code
+				),
 				$pattern );
 
 			return $message;
