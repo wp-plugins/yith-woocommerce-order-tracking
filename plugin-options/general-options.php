@@ -1,4 +1,5 @@
 <?php
+global $YWOT_Instance;
 /**
  * This file belongs to the YIT Plugin Framework.
  *
@@ -18,7 +19,7 @@ if ( defined( 'YITH_YWOT_PREMIUM' ) ) {
 		'name'    => __( 'Default carrier name', 'ywot' ),
 		'id'      => 'ywot_carrier_default_name',
 		'type'    => 'select',
-		'desc'    => __( ' To display the list of the carriers, you have to select them first from the specific "Carriers" tab you can find in the top part of the screen', 'ywot' ),
+		'desc'    => __( '  To display the list of carriers, you have to select them first from the specific "Carriers" tab that you can find in the top part of the screen.', 'ywot' ),
 		'options' => Carriers::getInstance()->get_carriers_enabled( true )
 	);
 } else {
@@ -44,7 +45,7 @@ $general_options = array(
 			'type'    => 'text',
 			'id'      => 'ywot_order_tracking_text',
 			'default' => __( 'Your order has been picked up by [carrier_name] on [pickup_date]. Your track code is [track_code].', 'ywot' ),
-			'desc'    => __( 'This is the text showed in the order details page. You can customize the text using the 3 following placeholders, which represent the real shipping information.', 'ywot' ) . '[carrier_name], [pickup_date], [track_code]',
+			'desc'    => __( 'This is the text showed in Order details page. You can customize the text using the following 3 placeholders, representing real shipping information.', 'ywot' ) . '[carrier_name], [pickup_date], [track_code]',
 			'css'     => 'width:60%'
 		),
 		'order_tracking_text_position' => array(
@@ -80,12 +81,12 @@ if ( ! defined( 'YITH_YWOT_PREMIUM' ) ) {
 				'video'                     => array(
 					'video_id'          => '118598446',
 					'video_image_url'   => YITH_YWOT_ASSETS_IMAGES_URL . 'yith-woocommerce-order-tracking-video.jpg',
-					'video_description' => __( 'See the YITH WooCommerce Order tracking plugin with full premium features in action', 'yit' ),
+					'video_description' => __( 'See YITH WooCommerce Order tracking plugin with full premium features in action', 'yit' ),
 				),
 				'title_second_column'       => __( 'Get Support and Pro Features', 'yit' ),
 				'description_second_column' => __( 'By purchasing the premium version of the plugin, you will take advantage of the advanced features of the product and you will get one year of free updates and support through our platform available 24h/24.', 'yit' ),
 				'button'                    => array(
-					'href'  => 'http://yithemes.com/themes/plugins/yith-woocommerce-order-tracking',
+					'href'  => $YWOT_Instance->get_premium_landing_uri(),
 					'title' => 'Get Support and Pro Features'
 				)
 			),

@@ -33,12 +33,12 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		/**
 		 * @var string Plugin official documentation
 		 */
-		protected $_official_documentation = 'http://yithemes.com/docs-plugins/yith_woocommerce_order_tracking/';
+		protected $_official_documentation = 'http://yithemes.com/docs-plugins/yith-woocommerce-order-tracking/';
 
 		/**
 		 * @var string Yith WooCommerce Order Tracking panel page
 		 */
-		protected $_panel_page = 'yith_woocommerce_order_tracking';
+		protected $_panel_page = 'yith_woocommerce_order_tracking_panel';
 
 		//region plugin settings page
 
@@ -321,7 +321,17 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 * @return void
 		 */
 		function add_order_shipping_details( $order ) {
-			$this->show_tracking_information( $order, $this->orders_pattern, '' );
+
+			$container_class = "ywot_order_details";
+			//  add top or bottom class, depending on the value of related option
+			if ( 1 == $this->order_text_position ) {
+				$container_class .= " top";
+			} else {
+				$container_class .= " bottom";
+			}
+
+			echo '<div class="' . $container_class . '">' . $this->show_tracking_information( $order, $this->orders_pattern, '' )
+			     . '</div>';
 		}
 
 
@@ -352,7 +362,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 
 			$message = $this->get_picked_up_message( $data, $pattern );
 
-			echo $prefix . $message;
+			return $prefix . $message;
 		}
 
 		//endregion
@@ -480,7 +490,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 			$links[] = '<a href="' . admin_url( "admin.php?page={$this->_panel_page}" ) . '">' . __( 'Settings', 'ywot' ) . '</a>';
 
 			if ( defined( 'YITH_YWOT_FREE_INIT' ) ) {
-				$links[] = '<a href="' . $this->_premium_landing . '" target="_blank">' . __( 'Premium Version', 'ywot' ) . '</a>';
+				$links[] = '<a href="' . $this->get_premium_landing_uri() . '" target="_blank">' . __( 'Premium Version', 'ywot' ) . '</a>';
 			}
 
 			return $links;
@@ -519,7 +529,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 			$premium_message = defined( 'YITH_YWOT_PREMIUM' )
 				? ''
 				: __( 'YITH WooCommerce Order Tracking is available in an outstanding PREMIUM version with many new options, discover it now.', 'ywot' ) .
-				  ' <a href="' . $this->_premium_landing . '">' . __( 'Premium version', 'ywot' ) . '</a>';
+				  ' <a href="' . $this->get_premium_landing_uri() . '">' . __( 'Premium version', 'ywot' ) . '</a>';
 
 			$args[] = array(
 				'screen_id'  => 'plugins',
@@ -527,7 +537,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 				'target'     => '#toplevel_page_yit_plugin_panel',
 				'content'    => sprintf( '<h3> %s </h3> <p> %s </p>',
 					__( 'YITH WooCommerce Order Tracking', 'ywot' ),
-					__( 'In the YIT Plugins tab you can find the YITH WooCommerce Order Tracking options. With this menu, you can access to all the settings of our plugins that you have activated.', 'ywot' ) . '<br>' . $premium_message
+					__( 'In YIT Plugins tab you can find YITH WooCommerce Advanced Reviews options. From this menu you can access all settings of YITH plugins activated.', 'ywot' ) . '<br>' . $premium_message
 				),
 				'position'   => array( 'edge' => 'left', 'align' => 'center' ),
 				'init'       => defined( 'YITH_YWOT_PREMIUM' ) ? YITH_YWOT_INIT : YITH_YWOT_FREE_INIT
@@ -535,6 +545,18 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 
 			YIT_Pointers()->register( $args );
 		}
+
+		/**
+		 * Get the premium landing uri
+		 *
+		 * @since   1.0.0
+		 * @author  Andrea Grillo <andrea.grillo@yithemes.com>
+		 * @return  string The premium landing link
+		 */
+		public function get_premium_landing_uri() {
+			return defined( 'YITH_REFER_ID' ) ? $this->_premium_landing . '?refer_id=' . YITH_REFER_ID : $this->_premium_landing;
+		}
+
 		//endregion
 
 
@@ -622,7 +644,9 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 */
 		function save_order_tracking_metabox( $post_id ) {
 			update_post_meta( $post_id, 'ywot_tracking_code', stripslashes( $_POST['ywot_tracking_code'] ) );
-			update_post_meta( $post_id, 'ywot_carrier_name', stripslashes( $_POST['ywot_carrier_name'] ) );
+			if ( isset( $_POST['ywot_carrier_name'] ) ) {
+				update_post_meta( $post_id, 'ywot_carrier_name', stripslashes( $_POST['ywot_carrier_name'] ) );
+			}
 			update_post_meta( $post_id, 'ywot_pick_up_date', stripslashes( $_POST['ywot_pick_up_date'] ) );
 			update_post_meta( $post_id, 'ywot_picked_up', stripslashes( $_POST['ywot_picked_up'] ) );
 		}

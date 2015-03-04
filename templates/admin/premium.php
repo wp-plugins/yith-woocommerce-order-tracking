@@ -1,3 +1,4 @@
+<?php global $YWOT_Instance; ?>
 <style>
     .section{
         margin-left: -20px;
@@ -176,7 +177,7 @@
                     Upgrade to the <span class="highlight">premium version</span>
                     of <span class="highlight">YITH WooCommerce Order Tracking</span> to benefit from all features!
                 </p>
-                <a href="http://yithemes.com/themes/plugins/yith-woocommerce-order-tracking" target="_blank" class="premium-cta-button button btn">
+                <a href="<?php echo $YWOT_Instance->get_premium_landing_uri(); ?>" target="_blank" class="premium-cta-button button btn">
                     <span class="highlight">UPGRADE</span>
                     <span>to the premium version</span>
                 </a>
@@ -255,7 +256,7 @@
                     Upgrade to the <span class="highlight">premium version</span>
                     of <span class="highlight">YITH WooCommerce Order Tracking</span> to benefit from all features!
                 </p>
-                <a href="http://yithemes.com/themes/plugins/yith-woocommerce-order-tracking" target="_blank" class="premium-cta-button button btn">
+                <a href="<?php echo $YWOT_Instance->get_premium_landing_uri(); ?>" target="_blank" class="premium-cta-button button btn">
                     <span class="highlight">UPGRADE</span>
                     <span>to the premium version</span>
                 </a>

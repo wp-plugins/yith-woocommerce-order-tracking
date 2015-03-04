@@ -10,7 +10,7 @@ Author URI: http://yithemes.com/
 
 @author Yithemes
 @package YITH WooCommerce Order Tracking
-@version 1.0.2
+@version 1.0.3
 */
 
 /*  Copyright 2015  Your Inspiration Themes  (email : plugins@yithemes.com)
@@ -64,7 +64,7 @@ if ( ! defined( 'YITH_YWOT_FREE_INIT' ) ) {
 }
 
 if ( ! defined( 'YITH_YWOT_VERSION' ) ) {
-	define( 'YITH_YWOT_VERSION', '1.0.2' );
+	define( 'YITH_YWOT_VERSION', '1.0.3' );
 }
 
 if ( ! defined( 'YITH_YWOT_FILE' ) ) {
@@ -102,25 +102,25 @@ function yith_ywot_init() {
 	// Load required classes and functions
 	require_once( YITH_YWOT_DIR . 'class.yith-woocommerce-order-tracking.php' );
 
+	global $YWOT_Instance;
 	$YWOT_Instance = new Yith_WooCommerce_Order_Tracking();
 }
-add_action( 'yith_ywot_init', 'yith_ywot_init' );
 
+add_action( 'yith_ywot_init', 'yith_ywot_init' );
 
 
 function yith_ywot_install() {
 
 	if ( ! function_exists( 'WC' ) ) {
 		add_action( 'admin_notices', 'yith_ywot_install_woocommerce_admin_notice' );
-	}
-	elseif ( defined( 'YITH_YWOT_PREMIUM' ) ) {
+	} elseif ( defined( 'YITH_YWOT_PREMIUM' ) ) {
 		add_action( 'admin_notices', 'yith_ywot_install_free_admin_notice' );
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-	}
-	else {
+	} else {
 		do_action( 'yith_ywot_init' );
 	}
 }
+
 add_action( 'plugins_loaded', 'yith_ywot_install', 11 );
 
 
