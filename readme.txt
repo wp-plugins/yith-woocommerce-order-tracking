@@ -1,7 +1,7 @@
 === YITH WooCommerce Order Tracking ===
 
 Contributors: yithemes
-Tags: woocommerce, order tracking, order track, order trace, delivery, carriers, shipping, ship orders, e-commerce, send product, product shipping, delivery notes, track carriers, track email, delivery note, order shipping, order, orders, shop, e commerce, ecommerce
+Tags: woocommerce, order tracking, order track, order trace, delivery, carriers, shipping, ship orders, e-commerce, send product, product shipping, delivery notes, track carriers, track email, delivery note, order shipping, order, orders, shop, e commerce, ecommerce 
 Requires at least: 4.0
 Tested up to: 4.1.1
 Stable tag: 1.0.2
