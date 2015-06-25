@@ -46,21 +46,25 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          */
         private $_main_array_options = array();
 
-        /**
-         * Constructor
-         *
-         * @since  1.0
-         * @author Emanuela Castorina <emanuela.castorina@yithemes.it>
-         */
+	    /**
+	     * Constructor
+	     *
+	     * @since  1.0
+	     * @author Emanuela Castorina <emanuela.castorina@yithemes.it>
+	     *
+	     * @param array $args
+	     */
         public function __construct( $args = array() ) {
 
             if ( ! empty( $args ) ) {
 
                 $default_args = array(
                     'parent_slug' => 'edit.php?',
-                    'page_title'  => __( 'Plugin Settings', 'yit' ),
-                    'menu_title'  => __( 'Settings', 'yit' ),
-                    'capability'  => 'manage_options'
+                    'page_title'  => __( 'Plugin Settings', 'yith-plugin-fw' ),
+                    'menu_title'  => __( 'Settings', 'yith-plugin-fw' ),
+                    'capability'  => 'manage_options',
+	                'icon_url'    => '',
+	                'position'    => null
                 );
 
                 $this->settings         = wp_parse_args( $args, $default_args );
@@ -70,11 +74,10 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
                     $this->add_menu_page();
                 }
 
-                add_action( 'admin_init', array( &$this, 'register_settings' ) );
-                add_action( 'admin_menu', array( &$this, 'add_setting_page' ) );
-                add_action( 'admin_bar_menu', array( &$this, 'add_admin_bar_menu' ), 100 );
-                add_action( 'admin_init', array( &$this, 'add_fields' ) );
-
+                add_action( 'admin_init', array( $this, 'register_settings' ) );
+                add_action( 'admin_menu', array( $this, 'add_setting_page' ), 20 );
+                add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 100 );
+                add_action( 'admin_init', array( $this, 'add_fields' ) );
 
             }
 
@@ -89,7 +92,8 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          * @author   Andrea Grillo <andrea.grillo@yithemes.com>
          */
         public function add_menu_page() {
-            add_menu_page( 'yit_plugin_panel', __( 'YIT Plugins', 'yit' ), 'manage_options', 'yit_plugin_panel', NULL, YIT_CORE_PLUGIN_URL . '/assets/images/yithemes-icon.png', 62 );
+            $position = apply_filters( 'yit_plugins_menu_item_position', '62.32' );
+            add_menu_page( 'yit_plugin_panel', __( 'YIT Plugins', 'yith-plugin-fw' ), 'manage_options', 'yit_plugin_panel', NULL, YIT_CORE_PLUGIN_URL . '/assets/images/yithemes-icon.png', $position );
         }
 
         /**
@@ -116,14 +120,18 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          * @author   Emanuela Castorina <emanuela.castorina@yithemes.it>
          */
         public function admin_enqueue_scripts() {
+
+	        global $wp_scripts;
+
             //scripts
             wp_enqueue_media();
             wp_enqueue_script( 'jquery-ui' );
             wp_enqueue_script( 'jquery-ui-core' );
             wp_enqueue_script( 'jquery-ui-slider' );
+            wp_enqueue_script( 'jquery-ui-dialog' );
             wp_enqueue_style( 'jquery-chosen', YIT_CORE_PLUGIN_URL . '/assets/css/chosen/chosen.css' );
             wp_enqueue_script( 'jquery-chosen', YIT_CORE_PLUGIN_URL . '/assets/js/chosen/chosen.jquery.js', array( 'jquery' ), '1.1.0', true );
-            wp_enqueue_script( 'yit-plugin-panel', YIT_CORE_PLUGIN_URL . '/assets/js/yit-plugin-panel.min.js', array( 'jquery', 'jquery-chosen' ), $this->version, true );
+            wp_enqueue_script( 'yit-plugin-panel', YIT_CORE_PLUGIN_URL . '/assets/js/yit-plugin-panel.js', array( 'jquery', 'jquery-chosen' ), $this->version, true );
             wp_register_script( 'codemirror', YIT_CORE_PLUGIN_URL . '/assets/js/codemirror/codemirror.js', array( 'jquery' ), $this->version, true );
             wp_register_script( 'codemirror-javascript', YIT_CORE_PLUGIN_URL . '/assets/js/codemirror/javascript.js', array( 'jquery', 'codemirror' ), $this->version, true );
 
@@ -131,9 +139,14 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
             wp_register_style( 'codemirror', YIT_CORE_PLUGIN_URL . '/assets/css/codemirror/codemirror.css' );
 
             //styles
+
+	        $jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
+
             wp_enqueue_style( 'jquery-ui-overcast', YIT_CORE_PLUGIN_URL . '/assets/css/overcast/jquery-ui-1.8.9.custom.css', false, '1.8.9', 'all' );
             wp_enqueue_style( 'yit-plugin-style', YIT_CORE_PLUGIN_URL . '/assets/css/yit-plugin-panel.css', $this->version );
             wp_enqueue_style( 'raleway-font', '//fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,100,200,300,900' );
+
+	        wp_enqueue_style( 'jquery-ui-style', '//code.jquery.com/ui/' . $jquery_version . '/themes/smoothness/jquery-ui.css', array(), $jquery_version );
         }
 
         /**
@@ -146,7 +159,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          * @author   Emanuela Castorina <emanuela.castorina@yithemes.it>
          */
         public function register_settings() {
-            register_setting( 'yit_' . $this->settings['parent'] . '_options', 'yit_' . $this->settings['parent'] . '_options', array( &$this, 'options_validate' ) );
+            register_setting( 'yit_' . $this->settings['parent'] . '_options', 'yit_' . $this->settings['parent'] . '_options', array( $this, 'options_validate' ) );
         }
 
         /**
@@ -221,7 +234,15 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          * @author   Emanuela Castorina <emanuela.castorina@yithemes.it>
          */
         public function add_setting_page() {
-            add_submenu_page( $this->settings['parent_slug'] . $this->settings['parent_page'], $this->settings['page_title'], $this->settings['menu_title'], $this->settings['capability'], $this->settings['page'], array( &$this, 'yit_panel' ) );
+	        $this->settings['icon_url'] = isset( $this->settings['icon_url'] ) ? $this->settings['icon_url'] : '';
+		    $this->settings['position'] = isset( $this->settings['position'] ) ? $this->settings['position'] : null;
+	        $parent = $this->settings['parent_slug'] . $this->settings['parent_page'];
+
+	        if ( ! empty( $parent ) ) {
+		        add_submenu_page( $parent, $this->settings['page_title'], $this->settings['menu_title'], $this->settings['capability'], $this->settings['page'], array( $this, 'yit_panel' ) );
+	        } else {
+		        add_menu_page( $this->settings['page_title'], $this->settings['menu_title'], $this->settings['capability'], $this->settings['page'], array( $this, 'yit_panel' ), $this->settings['icon_url'], $this->settings['position'] );
+	        }
             /* === Duplicate Items Hack === */
             $this->remove_duplicate_submenu_page();
             do_action( 'yit_after_add_settings_page' );
@@ -259,6 +280,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
                 return;
             }
             ?>
+	        <?php $this->print_video_box(); ?>
             <div id="wrap" class="plugin-option">
                 <?php $this->message(); ?>
                 <h2><?php echo $this->get_tab_title() ?></h2>
@@ -268,12 +290,12 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
                         <p>&nbsp;</p>
                         <?php settings_fields( 'yit_' . $this->settings['parent'] . '_options' ); ?>
                         <input type="hidden" name="<?php echo $this->get_name_field( 'current_tab' ) ?>" value="<?php echo esc_attr( $current_tab ) ?>" />
-                        <input type="submit" class="button-primary" value="<?php _e( 'Save Changes', 'yit' ) ?>" style="float:left;margin-right:10px;" />
+                        <input type="submit" class="button-primary" value="<?php _e( 'Save Changes', 'yith-plugin-fw' ) ?>" style="float:left;margin-right:10px;" />
                     </form>
                     <form method="post">
-                        <?php $warning = __( 'If you continue with this action, you will reset all options in this page.', 'yit' ) ?>
+                        <?php $warning = __( 'If you continue with this action, you will reset all options in this page.', 'yith-plugin-fw' ) ?>
                         <input type="hidden" name="yit-action" value="reset" />
-                        <input type="submit" name="yit-reset" class="button-secondary" value="<?php _e( 'Reset Defaults', 'yit' ) ?>" onclick="return confirm('<?php echo $warning . '\n' . __( 'Are you sure?', 'yit' ) ?>');" />
+                        <input type="submit" name="yit-reset" class="button-secondary" value="<?php _e( 'Reset to Default', 'yith-plugin-fw' ) ?>" onclick="return confirm('<?php echo $warning . '\n' . __( 'Are you sure?', 'yith-plugin-fw' ) ?>');" />
                     </form>
                     <p>&nbsp;</p>
                 <?php endif ?>
@@ -407,17 +429,17 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
         public function message() {
 
             $message = array(
-                'element_exists'   => $this->get_message( '<strong>' . __( 'The element you have entered already exists. Please, enter another name.', 'yit' ) . '</strong>', 'error', false ),
-                'saved'            => $this->get_message( '<strong>' . __( 'Settings saved', 'yit' ) . '.</strong>', 'updated', false ),
-                'reset'            => $this->get_message( '<strong>' . __( 'Settings reset', 'yit' ) . '.</strong>', 'updated', false ),
-                'delete'           => $this->get_message( '<strong>' . __( 'Element deleted correctly.', 'yit' ) . '</strong>', 'updated', false ),
-                'updated'          => $this->get_message( '<strong>' . __( 'Element updated correctly.', 'yit' ) . '</strong>', 'updated', false ),
-                'settings-updated' => $this->get_message( '<strong>' . __( 'Element updated correctly.', 'yit' ) . '</strong>', 'updated', false ),
-                'imported'         => $this->get_message( '<strong>' . __( 'Database imported correctly.', 'yit' ) . '</strong>', 'updated', false ),
-                'no-imported'      => $this->get_message( '<strong>' . __( 'An error has occurred during import. Please try again.', 'yit' ) . '</strong>', 'error', false ),
-                'file-not-valid'   => $this->get_message( '<strong>' . __( 'The added file is not valid.', 'yit' ) . '</strong>', 'error', false ),
-                'cant-import'      => $this->get_message( '<strong>' . __( 'Sorry, import is disabled.', 'yit' ) . '</strong>', 'error', false ),
-                'ord'              => $this->get_message( '<strong>' . __( 'Sorting successful.', 'yit' ) . '</strong>', 'updated', false )
+                'element_exists'   => $this->get_message( '<strong>' . __( 'The element you have entered already exists. Please, enter another name.', 'yith-plugin-fw' ) . '</strong>', 'error', false ),
+                'saved'            => $this->get_message( '<strong>' . __( 'Settings saved', 'yith-plugin-fw' ) . '.</strong>', 'updated', false ),
+                'reset'            => $this->get_message( '<strong>' . __( 'Settings reset', 'yith-plugin-fw' ) . '.</strong>', 'updated', false ),
+                'delete'           => $this->get_message( '<strong>' . __( 'Element deleted correctly.', 'yith-plugin-fw' ) . '</strong>', 'updated', false ),
+                'updated'          => $this->get_message( '<strong>' . __( 'Element updated correctly.', 'yith-plugin-fw' ) . '</strong>', 'updated', false ),
+                'settings-updated' => $this->get_message( '<strong>' . __( 'Element updated correctly.', 'yith-plugin-fw' ) . '</strong>', 'updated', false ),
+                'imported'         => $this->get_message( '<strong>' . __( 'Database imported correctly.', 'yith-plugin-fw' ) . '</strong>', 'updated', false ),
+                'no-imported'      => $this->get_message( '<strong>' . __( 'An error has occurred during import. Please try again.', 'yith-plugin-fw' ) . '</strong>', 'error', false ),
+                'file-not-valid'   => $this->get_message( '<strong>' . __( 'The added file is not valid.', 'yith-plugin-fw' ) . '</strong>', 'error', false ),
+                'cant-import'      => $this->get_message( '<strong>' . __( 'Sorry, import is disabled.', 'yith-plugin-fw' ) . '</strong>', 'error', false ),
+                'ord'              => $this->get_message( '<strong>' . __( 'Sorting successful.', 'yith-plugin-fw' ) . '</strong>', 'updated', false )
             );
 
             foreach ( $message as $key => $value ) {
@@ -677,6 +699,16 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
                 $option     = $param ['option'];
                 $db_options = $this->get_options();
 
+                $custom_attributes = array();
+
+                if ( ! empty( $option['custom_attributes'] ) && is_array( $option['custom_attributes'] ) ) {
+                    foreach ( $option['custom_attributes'] as $attribute => $attribute_value ) {
+                        $custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+                    }
+                }
+
+                $custom_attributes = implode( ' ', $custom_attributes );
+
                 $db_value = ( isset( $db_options[$option['id']] ) ) ? $db_options[$option['id']] : '';
                 if ( isset( $option['deps'] ) ) {
                     $deps = $option['deps'];
@@ -686,7 +718,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
                     include $type;
                 }
                 else {
-                    do_action( "yit_panel_{$option['type']}" );
+                    do_action( "yit_panel_{$option['type']}", $option, $db_value, $custom_attributes );
                 }
             }
         }
@@ -709,6 +741,57 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
             return $options;
         }
 
+        /**
+         * Show a box panel with specific content in two columns as a new woocommerce type
+         *
+         *
+         * @param array $args
+         *
+         * @return   void
+         * @since    1.0
+         * @author   Emanuela Castorina      <emanuela.castorina@yithemes.com>
+         */
+        public function add_infobox( $args = array() ) {
+            if ( ! empty( $args ) ) {
+                extract( $args );
+                require_once( YIT_CORE_PLUGIN_TEMPLATE_PATH . '/panel/boxinfo.php' );
+            }
+        }
+
+        /**
+         * Show a box panel with specific content in two columns as a new woocommerce type
+         *
+         * @param array $args
+         *
+         * @return   void
+         * @since    1.0
+         * @author   Emanuela Castorina      <emanuela.castorina@yithemes.com>
+         */
+        public function add_videobox( $args = array() ) {
+            if ( ! empty( $args ) ) {
+                extract( $args );
+                require_once( YIT_CORE_PLUGIN_TEMPLATE_PATH . '/panel/videobox.php' );
+            }
+        }
+
+	    /**
+	     * Fire the action to print the custom tab
+	     *
+	     * @return void
+	     * @since    1.0
+	     * @author   Antonino Scarfì <antonino.scarfi@yithemes.com>
+	     */
+	    public function print_video_box() {
+		    $file = $this->settings['options-path'] . '/video-box.php';
+
+		    if ( ! file_exists( $file ) ) {
+			    return;
+		    }
+
+		    $args = include_once( $file );
+
+		    $this->add_videobox( $args );
+	    }
 
     }
 

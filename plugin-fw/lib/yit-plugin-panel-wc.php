@@ -65,9 +65,9 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
                 add_action( 'admin_init', array( $this, 'woocommerce_update_options' ) );
 	            add_filter( 'woocommerce_screen_ids', array( $this, 'add_allowed_screen_id' ) );
 
-                add_action( 'woocommerce_admin_field_boxinfo', array( $this, 'yit_boxinfo' ), 10, 1 );
-                add_action( 'woocommerce_admin_field_videobox', array( $this, 'yit_videobox' ), 10, 1 );
-
+                /* Add VideoBox and InfoBox */
+                add_action( 'woocommerce_admin_field_boxinfo', array( $this, 'add_infobox' ), 10, 1 );
+                add_action( 'woocommerce_admin_field_videobox', array( $this, 'add_videobox' ), 10, 1 );
             }
         }
 
@@ -95,36 +95,6 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
 
             extract( $additional_info );
             require_once( YIT_CORE_PLUGIN_TEMPLATE_PATH . '/panel/woocommerce/woocommerce-panel.php' );
-        }
-
-        /**
-         * Show a box panel with specific content in two columns as a new woocommerce type
-         *
-         *
-         * @return   void
-         * @since    1.0
-         * @author   Emanuela Castorina      <emanuela.castorina@yithemes.com>
-         */
-        public function yit_boxinfo( $args = array() ) {
-        if ( !empty( $args ) ) {
-            extract( $args );
-            require_once( YIT_CORE_PLUGIN_TEMPLATE_PATH . '/panel/woocommerce/woocommerce-boxinfo.php' );
-        }
-    }
-
-        /**
-         * Show a box panel with specific content in two columns as a new woocommerce type
-         *
-         *
-         * @return   void
-         * @since    1.0
-         * @author   Emanuela Castorina      <emanuela.castorina@yithemes.com>
-         */
-        public function yit_videobox( $args = array() ) {
-            if ( ! empty( $args ) ) {
-                extract( $args );
-                require_once( YIT_CORE_PLUGIN_TEMPLATE_PATH . '/panel/woocommerce/woocommerce-videobox.php' );
-            }
         }
 
         /**
@@ -262,26 +232,6 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
             }
         }
 
-	    /**
-	     * Fire the action to print the custom tab
-	     *
-	     * @param $current_tab string
-	     *
-	     * @return void
-	     * @since    1.0
-	     * @author   Antonino Scarfì <antonino.scarfi@yithemes.com>
-	     */
-	    public function print_video_box() {
-		    $file = $this->settings['options-path'] . '/video-box.php';
-
-		    if ( ! file_exists( $file ) ) {
-			    return;
-		    }
-
-		    $args = include_once( $file );
-		    $this->yit_videobox( $args );
-	    }
-
         /**
          * Update options
          *
@@ -342,7 +292,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
             wp_enqueue_script( 'woocommerce_settings', $woocommerce->plugin_url() . '/assets/js/admin/settings.min.js', array( 'jquery', 'jquery-ui-datepicker','jquery-ui-dialog', 'jquery-ui-sortable', 'iris', 'chosen' ), $woocommerce->version, true );
             wp_enqueue_script( 'yit-plugin-panel', YIT_CORE_PLUGIN_URL . '/assets/js/yit-plugin-panel.min.js', array( 'jquery', 'jquery-chosen' ), $this->version, true );
             wp_localize_script( 'woocommerce_settings', 'woocommerce_settings_params', array(
-                'i18n_nav_warning' => __( 'The changes you have made will be lost if you leave this page.', 'yit' )
+                'i18n_nav_warning' => __( 'The changes you have made will be lost if you leave this page.', 'yith-plugin-fw' )
             ) );
         }
 
