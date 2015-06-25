@@ -3,8 +3,8 @@
 Contributors: yithemes
 Tags: woocommerce, order tracking, order track, order trace, delivery, carriers, shipping, ship orders, e-commerce, send product, product shipping, delivery notes, track carriers, track email, delivery note, order shipping, order, orders, shop, e commerce, ecommerce
 Requires at least: 4.0
-Tested up to: 4.1.1
-Stable tag: 1.0.2
+Tested up to: 4.2.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 
@@ -18,6 +18,15 @@ YITH Woocommerce Order Tracking is a WordPress plugin that allows you to manage 
 
 You do not have to spend your precious time to manage telephone calls and emails from your customers, who want to know if their order has been shipped.
 Devote yourself and your time to more profitable activities for your online shop and make communication with your customers be managed automatically each time one of your orders is set as "shipped".
+
+= Main features =
+
+* Do you ship your order always or mainly with the same carrier? You don't have to add this information, every shipping will be prearranged with the default carrier.
+* Customize the message you want to show to your users in the order detail.
+* Use some placeholders to fill automatically the carrier details, the tracking code and the shipping date.
+* Choose the place in the order detail where you want to show the message to your users: you can place it before or after the order content.
+* Manage easily the tracking details of the shipping from the related order page in the back end.
+* Identify smoothly which orders have been shipped and which are waiting for from the "Orders" page in the back end.
 
 For a more detailed list of options and features of the plugin, please look at the [official documentation](http://yithemes.com/docs-plugins/yith-woocommerce-order-tracking/ "Yith WooCommerce Order Tracking official documentation").
 
@@ -43,6 +52,10 @@ YITH WooCommerce Order Tracking will add a new tab called "Order tracking" in "Y
 5. In the customer order page, you will find the reported details about the shipment.
 
 == Changelog ==
+
+= Version 1.0.3 - RELEASED: JUN 25, 2015 =
+
+* Fixed: WPML compatibility issue
 
 = Version 1.0.2 - RELEASED: FEB 17, 2015 =
 
@@ -80,6 +93,6 @@ If you have created your own language pack, or have an update for an existing on
 
 == Upgrade notice ==
 
-= 1.0.2 =
+= 1.0.3 =
 
 Last release

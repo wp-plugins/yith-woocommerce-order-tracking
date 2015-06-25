@@ -48,11 +48,6 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		protected $default_carrier;
 
 		/**
-		 * @var string  Customizable text to be shown on orders
-		 */
-		protected $orders_pattern;
-
-		/**
 		 * @var position of text related to order details page
 		 */
 		protected $order_text_position;
@@ -127,9 +122,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 */
 		public function initialize_settings() {
 			$this->default_carrier     = get_option( 'ywot_carrier_default_name' );
-			$this->orders_pattern      = get_option( 'ywot_order_tracking_text' );
 			$this->order_text_position = get_option( 'ywot_order_tracking_text_position' );
-
 		}
 
 		/**
@@ -144,7 +137,8 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 
 			wp_register_script( "tooltipster", YITH_YWOT_URL . 'assets/js/jquery.tooltipster.min.js', array( 'jquery' ) );
 			wp_enqueue_script( 'tooltipster' );
-			wp_enqueue_style( 'tooltipster_css', YITH_YWOT_URL . 'assets/css/tooltipster.css' );
+
+			wp_enqueue_style( 'ywot_style', YITH_YWOT_URL . 'assets/css/ywot_style.css' );
 
 			wp_register_script( "ywot_script", YITH_YWOT_URL . 'assets/js/ywot.js' );
 			$premium = defined( 'YITH_YWOT_PREMIUM' );
@@ -232,7 +226,8 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 		 */
 		public function get_picked_up_message( $data, $pattern = '' ) {
 			if ( ! isset( $pattern ) || ( 0 == strlen( $pattern ) ) ) {
-				$pattern = $this->orders_pattern;
+				$pattern = get_option( 'ywot_order_tracking_text' );
+
 			}
 
 			//  Retrieve additional information to be shown
@@ -330,8 +325,7 @@ if ( ! class_exists( 'YITH_WooCommerce_Order_Tracking' ) ) {
 				$container_class .= " bottom";
 			}
 
-			echo '<div class="' . $container_class . '">' . $this->show_tracking_information( $order, $this->orders_pattern, '' )
-			     . '</div>';
+			echo '<div class="' . $container_class . '">' . $this->show_tracking_information( $order, get_option( 'ywot_order_tracking_text' ), '' ) . '</div>';
 		}
 
 
